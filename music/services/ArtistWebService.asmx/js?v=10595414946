@@ -1,0 +1,87 @@
+Type.registerNamespace('CBC.Radio3.Music.WebServices');
+CBC.Radio3.Music.WebServices.ArtistWebService=function() {
+CBC.Radio3.Music.WebServices.ArtistWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Music.WebServices.ArtistWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_path();},
+GetArtistsByLetter:function(letter,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArtistsByLetter',false,{letter:letter},succeededCallback,failedCallback,userContext); },
+GetTrackInfos:function(urlFriendlyName,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetTrackInfos',false,{urlFriendlyName:urlFriendlyName},succeededCallback,failedCallback,userContext); },
+GetTrackInfo:function(urlFriendlyName,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetTrackInfo',false,{urlFriendlyName:urlFriendlyName},succeededCallback,failedCallback,userContext); },
+UpdateFanStatus:function(artistPermalink,becomeFan,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'UpdateFanStatus',false,{artistPermalink:artistPermalink,becomeFan:becomeFan},succeededCallback,failedCallback,userContext); },
+GetFans:function(urlFriendlyName,page,numPerPage,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetFans',false,{urlFriendlyName:urlFriendlyName,page:page,numPerPage:numPerPage},succeededCallback,failedCallback,userContext); },
+GetArtistFavourites:function(urlFriendlyName,page,numPerPage,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArtistFavourites',false,{urlFriendlyName:urlFriendlyName,page:page,numPerPage:numPerPage},succeededCallback,failedCallback,userContext); },
+GetArtistBrowserList:function(searchDto,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArtistBrowserList',false,{searchDto:searchDto},succeededCallback,failedCallback,userContext); },
+GetArtistByName:function(name,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArtistByName',false,{name:name},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Music.WebServices.ArtistWebService.registerClass('CBC.Radio3.Music.WebServices.ArtistWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance = new CBC.Radio3.Music.WebServices.ArtistWebService();
+CBC.Radio3.Music.WebServices.ArtistWebService.set_path = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_path(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_path = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_path(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_timeout = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_timeout = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_defaultUserContext = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_defaultUserContext = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_enableJsonp = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_enableJsonp = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Music.WebServices.ArtistWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Music.WebServices.ArtistWebService.set_path("/music/services/ArtistWebService.asmx");
+CBC.Radio3.Music.WebServices.ArtistWebService.GetArtistsByLetter= function(letter,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetArtistsByLetter(letter,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetTrackInfos= function(urlFriendlyName,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetTrackInfos(urlFriendlyName,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetTrackInfo= function(urlFriendlyName,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetTrackInfo(urlFriendlyName,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.UpdateFanStatus= function(artistPermalink,becomeFan,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.UpdateFanStatus(artistPermalink,becomeFan,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetFans= function(urlFriendlyName,page,numPerPage,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetFans(urlFriendlyName,page,numPerPage,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetArtistFavourites= function(urlFriendlyName,page,numPerPage,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetArtistFavourites(urlFriendlyName,page,numPerPage,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetArtistBrowserList= function(searchDto,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetArtistBrowserList(searchDto,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.ArtistWebService.GetArtistByName= function(name,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.ArtistWebService._staticInstance.GetArtistByName(name,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Artists.DataTransfer');
+if (typeof(CBC.Radio3.Artists.DataTransfer.ArtistBigListDTO) === 'undefined') {
+CBC.Radio3.Artists.DataTransfer.ArtistBigListDTO=gtc("CBC.Radio3.Artists.DataTransfer.ArtistBigListDTO");
+CBC.Radio3.Artists.DataTransfer.ArtistBigListDTO.registerClass('CBC.Radio3.Artists.DataTransfer.ArtistBigListDTO');
+}
+Type.registerNamespace('CBC.Radio3.Music.Tasks');
+if (typeof(CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO) === 'undefined') {
+CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO=gtc("CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO");
+CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO.registerClass('CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO');
+}
+if (typeof(CBC.Radio3.Artists.DataTransfer.ArtistFanDTO) === 'undefined') {
+CBC.Radio3.Artists.DataTransfer.ArtistFanDTO=gtc("CBC.Radio3.Artists.DataTransfer.ArtistFanDTO");
+CBC.Radio3.Artists.DataTransfer.ArtistFanDTO.registerClass('CBC.Radio3.Artists.DataTransfer.ArtistFanDTO');
+}
+if (typeof(CBC.Radio3.Artists.DataTransfer.ArtistFavouriteDTO) === 'undefined') {
+CBC.Radio3.Artists.DataTransfer.ArtistFavouriteDTO=gtc("CBC.Radio3.Artists.DataTransfer.ArtistFavouriteDTO");
+CBC.Radio3.Artists.DataTransfer.ArtistFavouriteDTO.registerClass('CBC.Radio3.Artists.DataTransfer.ArtistFavouriteDTO');
+}
+Type.registerNamespace('CBC.Radio3.Search.Tasks');
+if (typeof(CBC.Radio3.Search.Tasks.ArtistSearchDTO) === 'undefined') {
+CBC.Radio3.Search.Tasks.ArtistSearchDTO=gtc("CBC.Radio3.Search.Tasks.ArtistSearchDTO");
+CBC.Radio3.Search.Tasks.ArtistSearchDTO.registerClass('CBC.Radio3.Search.Tasks.ArtistSearchDTO');
+}
+Type.registerNamespace('CBC.Radio3.Core.DataTransfer');
+if (typeof(CBC.Radio3.Core.DataTransfer.BrowserListDTO) === 'undefined') {
+CBC.Radio3.Core.DataTransfer.BrowserListDTO=gtc("CBC.Radio3.Core.DataTransfer.BrowserListDTO");
+CBC.Radio3.Core.DataTransfer.BrowserListDTO.registerClass('CBC.Radio3.Core.DataTransfer.BrowserListDTO');
+}
+if (typeof(CBC.Radio3.Music.WebServices.GetArtistByNameVM) === 'undefined') {
+CBC.Radio3.Music.WebServices.GetArtistByNameVM=gtc("CBC.Radio3.Music.WebServices.GetArtistByNameVM");
+CBC.Radio3.Music.WebServices.GetArtistByNameVM.registerClass('CBC.Radio3.Music.WebServices.GetArtistByNameVM');
+}

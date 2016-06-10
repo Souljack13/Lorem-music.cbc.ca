@@ -1,0 +1,52 @@
+Type.registerNamespace('CBC.Radio3.Polling.WebServices');
+CBC.Radio3.Polling.WebServices.VotingWebService=function() {
+CBC.Radio3.Polling.WebServices.VotingWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Polling.WebServices.VotingWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_path();},
+CollectVote:function(collectVoteDTO,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'CollectVote',false,{collectVoteDTO:collectVoteDTO},succeededCallback,failedCallback,userContext); },
+GetResults:function(pollId,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetResults',false,{pollId:pollId},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Polling.WebServices.VotingWebService.registerClass('CBC.Radio3.Polling.WebServices.VotingWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance = new CBC.Radio3.Polling.WebServices.VotingWebService();
+CBC.Radio3.Polling.WebServices.VotingWebService.set_path = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_path(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_path = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_path(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_timeout = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_timeout = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_defaultUserContext = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_defaultUserContext = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_enableJsonp = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_enableJsonp = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Polling.WebServices.VotingWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Polling.WebServices.VotingWebService.set_path("/services/VotingWebService.asmx");
+CBC.Radio3.Polling.WebServices.VotingWebService.CollectVote= function(collectVoteDTO,onSuccess,onFailed,userContext) {CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.CollectVote(collectVoteDTO,onSuccess,onFailed,userContext); }
+CBC.Radio3.Polling.WebServices.VotingWebService.GetResults= function(pollId,onSuccess,onFailed,userContext) {CBC.Radio3.Polling.WebServices.VotingWebService._staticInstance.GetResults(pollId,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Polling.VoteManagers');
+if (typeof(CBC.Radio3.Polling.VoteManagers.CollectVoteDTO) === 'undefined') {
+CBC.Radio3.Polling.VoteManagers.CollectVoteDTO=gtc("CBC.Radio3.Polling.VoteManagers.CollectVoteDTO");
+CBC.Radio3.Polling.VoteManagers.CollectVoteDTO.registerClass('CBC.Radio3.Polling.VoteManagers.CollectVoteDTO');
+}
+Type.registerNamespace('CBC.Radio3.Users.Services');
+if (typeof(CBC.Radio3.Users.Services.TaskResult) === 'undefined') {
+CBC.Radio3.Users.Services.TaskResult=gtc("CBC.Radio3.Users.Services.TaskResult");
+CBC.Radio3.Users.Services.TaskResult.registerClass('CBC.Radio3.Users.Services.TaskResult');
+}
+Type.registerNamespace('CBC.Radio3.Polling.DataTransfer');
+if (typeof(CBC.Radio3.Polling.DataTransfer.VotingTaskResultDTO) === 'undefined') {
+CBC.Radio3.Polling.DataTransfer.VotingTaskResultDTO=gtc("CBC.Radio3.Polling.DataTransfer.VotingTaskResultDTO");
+CBC.Radio3.Polling.DataTransfer.VotingTaskResultDTO.registerClass('CBC.Radio3.Polling.DataTransfer.VotingTaskResultDTO');
+}

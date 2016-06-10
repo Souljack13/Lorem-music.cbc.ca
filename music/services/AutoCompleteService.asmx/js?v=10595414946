@@ -1,0 +1,39 @@
+Type.registerNamespace('CBC.Radio3.Music.WebServices');
+CBC.Radio3.Music.WebServices.AutoCompleteService=function() {
+CBC.Radio3.Music.WebServices.AutoCompleteService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Music.WebServices.AutoCompleteService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_path();},
+FindArtists:function(searchText,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'FindArtists',false,{searchText:searchText},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Music.WebServices.AutoCompleteService.registerClass('CBC.Radio3.Music.WebServices.AutoCompleteService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance = new CBC.Radio3.Music.WebServices.AutoCompleteService();
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_path = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_path(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_path = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_path(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_timeout = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_timeout(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_timeout = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_timeout(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_defaultUserContext = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_defaultUserContext = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_defaultSucceededCallback = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_defaultFailedCallback = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_defaultFailedCallback = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_enableJsonp = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_enableJsonp = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Music.WebServices.AutoCompleteService.set_path("/music/services/AutoCompleteService.asmx");
+CBC.Radio3.Music.WebServices.AutoCompleteService.FindArtists= function(searchText,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AutoCompleteService._staticInstance.FindArtists(searchText,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Artists.DataTransfer');
+if (typeof(CBC.Radio3.Artists.DataTransfer.ArtistAutoCompleteDTO) === 'undefined') {
+CBC.Radio3.Artists.DataTransfer.ArtistAutoCompleteDTO=gtc("CBC.Radio3.Artists.DataTransfer.ArtistAutoCompleteDTO");
+CBC.Radio3.Artists.DataTransfer.ArtistAutoCompleteDTO.registerClass('CBC.Radio3.Artists.DataTransfer.ArtistAutoCompleteDTO');
+}

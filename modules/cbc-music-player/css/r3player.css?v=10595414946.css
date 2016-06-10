@@ -1,0 +1,680 @@
+﻿/* new player design */
+#r3player_modules
+{
+	z-index:100;
+	position:relative;
+}
+
+#r3player
+{
+    width:618px;
+    height:70px;
+    position:relative;
+	overflow:visible;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+a.r3playerLink
+{
+	color:#006699;
+	text-decoration:none;
+	
+}
+
+a.r3playerLink:active,
+a.r3playerLink:hover,
+a.r3playerLink:focus
+{
+	text-decoration:underline;
+}
+
+#r3player button
+{
+    outline: 0;
+    
+}
+
+.playerButton
+{
+    width:49px;
+    height:49px;
+    display:block;
+    overflow:hidden;
+    position:absolute;
+    cursor:pointer;
+	border:none;
+	text-indent:-7000px;
+	letter-spacing:-130px;
+}
+
+#r3player .display
+{
+    width:500px;
+    height:49px;
+    overflow:hidden;
+    position:absolute;
+}   
+
+#r3player #playPause
+{
+    width:36px;
+    height:60px;
+    position:absolute;
+    left:46px;
+    top:0px;
+}
+button::-moz-focus-inner {
+  border: 0;
+}
+
+	#r3player #playPause.play
+	{
+		background: url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -46px -70px;
+	}
+		#r3player #playPause.play:hover
+		{
+			background-position: -46px -125px;
+		}
+		#r3player #playPause.play:active
+		{
+			background-position: -46px -125px;
+		}
+		#r3player #playPause.play.disabled
+		{
+			background-position:-46px -180px;
+		}
+
+	
+	#r3player #playPause.pause
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -118px -70px;
+	}
+		#r3player #playPause.pause:hover
+		{
+			background-position: -118px -125px;
+		}
+		#r3player #playPause.pause:active
+		{
+			background-position: -118px -125px;
+		}
+		
+		
+		#r3player #playPause.pause.disabled
+		{
+			background-position:-118px -180px;
+		}
+
+		
+/************************
+Track/Status Display and Permalink Context
+************************/		
+#r3player #trackDisplay
+{
+    height: 72px;
+    left:100px;
+    top:0;
+}
+	
+	#r3player #nowPlaying
+	{
+		width:60px;
+		height:10px;		
+		position:absolute;
+		top:72px;
+		left:100px;	
+		background:url(../images/R3Player_Assets.gif) -100px -150px transparent;
+	}
+		#r3player #nowPlaying:hover
+		{
+			background-position:-100px -170px;
+		}		
+		
+		#r3player #nowPlaying.disabled
+		{
+			cursor:default;
+			background-position:-100px -150px;
+		}
+		
+	#r3player #info
+	{		
+		position:relative;
+		left:21px;
+		top:7px;
+		height:35px;
+		overflow:hidden;
+	    border: solid 0px red;
+	    width:330px;
+	}	
+	#r3player #info .infoStatic {
+	    border: 0px solid red; float: left; position: relative; width: 800px;    
+	}
+	
+	#r3player #info .infoContainer
+	{
+	    border: 0px solid blue;
+	    display: inline-block;
+	    float:left;
+	    position: relative;
+	}
+		
+	#r3player #trackDisplay #info .title
+	{
+		color:#000;
+		height:16px;
+		overflow:hidden;
+		line-height:16px;
+		clear:both;
+	}
+		
+	#r3player #trackDisplay #info .title a
+	{
+	    
+	}				
+
+	#r3player #trackDisplay #info .subTitle
+	{
+		min-width:330px;
+		min-height:16px;
+		color:#000;
+		line-height:13px;
+	    font-size: 15px;
+	    float:left;
+	    white-space: nowrap;
+	}
+	#r3player #trackDisplay #info .subTitle span { font-size: 13px;}
+	
+	#r3player #trackDisplay #info .subTitle a
+	{
+		padding-right:5px;
+	}
+	
+	#r3player #time
+	{
+		font-size:10px;
+		color:#000;
+		width:36px;
+		height:11px;
+		overflow:hidden;
+		text-align:left;
+		line-height:11px;
+		cursor:pointer;
+		position:absolute;
+		left:333px;
+		top:5px;
+    }
+	
+		#r3player #timeLabel
+		{
+			cursor:pointer;
+		}
+
+		/*Styles for Context Templates for Now Playing button*/
+		#r3player #trackDisplay .context .streamContext
+		{
+			text-transform:uppercase;
+		}
+		
+		#r3player #trackDisplay .context .playlistContext
+		{
+
+		}			
+			#r3player #trackDisplay .context .playlistContext .subTitle a
+			{
+				color:#ffcc00;
+				
+			}
+		
+		
+		
+/********************************************
+*Previous/History and Next/Upcoming Controls
+********************************************/		
+		
+#r3player #prev
+{
+   left:0;
+   top:0px;
+}
+	#r3player .playerButton.prevPlaylist
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -0px -70px; 
+	}
+		#r3player .playerButton.prevPlaylist:hover, 
+		#r3player .playerButton.prevPlaylist:focus
+		{
+			background-position:  -0px -125px;
+		}
+		#r3player .playerButton.prevPlaylist:active
+		{
+			background-position: -0px -70px;
+		}
+				
+	
+	#r3player .playerButton.prevStream
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat  0px -144px;
+	}
+		#r3player .playerButton.prevStream:hover, 
+		#r3player .playerButton.prevStream:focus
+		{
+			background-position:  0px -215px;
+		}
+		
+		#r3player .playerButton.prevStream:active
+		{
+			background-position:  0px -144px;
+		}
+
+	#r3player .playerButton.prevStream.disabled,
+	#r3player .playerButton.prevPlaylist.disabled
+	{
+		background-position:  0px -180px;
+	}
+
+	
+#r3player #next
+{
+    width: 40px;
+   left:76px;
+   top:0px;
+}
+	#r3player .nextPlaylist
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -76px -70px; 
+	}
+		#r3player .nextPlaylist:hover, .nextPlaylist:focus
+		{
+			background-position: -76px -125px; 
+		}
+		#r3player .nextPlaylist:active
+		{
+			background-position: -76px -70px; 
+		}
+	
+	#r3player .nextStream
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -76px -144px; 
+	}
+		#r3player .nextStream:hover, .nextStream:focus
+		{
+			background-position: -76px -215px; 
+		}
+		#r3player .nextStream:active
+		{
+			background-position: -76px -144px; 
+		}
+
+	#r3player .playerButton.nextPlaylist.disabled,
+	#r3player .playerButton.nextStream.disabled
+	{
+		background-position: -76px -180px;
+	}
+	
+/********************************************
+*Stream/Playlist toggle Controls
+********************************************/				
+#r3player #controls
+{
+   left:116px;
+   top:45px;
+   height: 25px;
+}
+	#r3player .toggle
+	{		
+		height:15px;
+		position:absolute;
+		display:block;
+		text-indent:-7000px;
+		letter-spacing:-130px;
+		border:none;
+		background:url(../images/playerSelector_Assets.gif%3Fv=2) no-repeat;
+	}
+
+		#r3player #stream
+		{
+			left:10px;
+			top:25px;
+			cursor:pointer;	
+			width:110px;	
+			display:none;		
+		}
+			
+			#r3player .stream {
+				background-position:0 0;
+			}
+			
+			#r3player .stream.off {
+				background-position:0 -16px;
+			}		
+			
+
+		#r3player #playlist
+		{
+			left:129px;
+			top:25px;
+			cursor:pointer;
+			width:90px;
+			display:none;
+		}
+			#r3player .playlist {
+				background-position:0 -32px;
+			}
+			
+			#r3player .playlist.off {
+				background-position:0 -48px;
+			}
+		
+	
+	#r3player #progressDisplay
+	{
+		position:absolute;
+	    top: 6px;
+		left:0px;
+		width:0;
+		height:10px;
+	    background: linear-gradient(to right, #28ace2 0, #3cc 90%);
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+	}
+	
+	#r3player .streamMode #progressDisplay
+	{
+	    display: none;
+		
+	}
+	
+	#r3player #progressFill
+	{
+		position:absolute;
+	    top: 6px;
+		left:5px;
+		height:15px;
+	}
+		
+	#r3player .buffering
+	{
+	    border:solid 0px blue;
+		background:url(../images/pole-smaller.gif) no-repeat 4px 3px;
+		position:absolute;
+		top:0px;
+	}
+
+    #r3player #stationInfo
+    {
+        position:absolute;
+		width:325px;
+		height:30px;
+		left:5px;
+		padding-top:3px;
+		
+	}
+	#r3player #stationInfo .hr
+	{
+	    height:4px;
+	    width:325px;
+	    position:absolute;
+	    top:0px;
+	    left:0px;
+	    float:left;
+	    background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -160px -85px;
+	    
+	}
+
+	#r3player #progressTrack
+	{
+		position:absolute;
+		width:315px;
+		height:25px;
+		left:5px;
+	}
+	
+    #r3player #progressHandle
+    {
+	    cursor:pointer; 
+	    position:absolute; 
+	    width:10px;
+	    height:10px;
+	    top: 6px;
+	    left: 5px;
+	    display:none;
+	    background-color: #333;
+        border-radius: 5px;
+	    -webkit-border-radius: 5px;
+	    -moz-border-radius: 5px;
+    }
+		
+		* html #progressHandle
+		{
+			cursor:default;
+		}
+	
+	#r3player #volumeTrack
+	{
+		width:98px;
+		height:10px;
+		background:none;
+		top:0px;
+		left:0px;
+		position:absolute;
+	    background-color: #e6e6e6;
+	    border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+	}
+	
+	#r3player #volumeLess
+	{
+	    height:12px;
+	    width:12px;
+	    position:absolute;
+	    left: -10px;
+	    top:6px;
+	    cursor:pointer;
+	    background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -502px -200px;
+	}
+	
+	#r3player #volumeMore
+	{
+	    height:20px;
+	    width:18px;
+	    left:102px;
+	    top:2px;
+	    position:absolute;
+	    cursor:pointer;
+	    background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -530px -196px;
+	}
+	
+	#r3player #volumeMore:hover
+	{
+	    background-position: -530px -216px;
+	}
+	#r3player #volumeLess:hover
+	{
+	    background-position: -502px -220px;
+	}
+	
+	#r3player #volumeHandle
+	{
+		cursor:pointer; 
+		width:10px;
+		height:10px;
+	    background-color: #333;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+	}
+	
+	#r3player #volume
+	{
+		position:absolute;
+	    left:379px;
+		float:left;
+	}
+	
+	#r3player #volumeSpan
+	{
+		height:10px;
+		top:6px;
+		margin-left:2px;
+		position:absolute;
+		
+	}
+
+#r3player #add
+{
+    background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -480px -89px;
+    width: 32px;
+    height:35px;
+    left:515px;
+    top:0;
+}
+	#r3player #add:hover
+	{
+	    background-position:  -480px -124px;
+	}
+	#r3player #add:active
+	{
+	    background-position: -480px -89px;
+	}
+	
+	#r3player #add.disabled
+	{
+	    background-position: -480px -159px;
+	    cursor:default;
+	}
+	
+	
+#r3player #buy
+{
+    background:url("../../../lib/cbcmusic/images/sprites/player.png") no-repeat -300px -180px;
+    width: 64px;
+    height:35px;
+    left:451px;
+    top:0;
+}
+	#r3player #buy:hover
+	{
+	    
+	}
+	#r3player #buy:active
+	{
+	    
+	}
+	
+	#r3player #buy.disabled
+	{
+	    background-position: -585px -159px;
+	    cursor:default;
+	}
+
+#r3player #addFavourite
+{
+	left:550px;
+	width:32px;
+	height:35px;
+	top:0px;
+	background:url("../../../lib/cbcmusic/images/sprites/player.png") -515px -89px; 		
+}
+		#r3player #addFavourite:hover
+		{
+			background-position: -515px -124px; 
+		}
+		#r3player #addFavourite:active
+		{
+			background-position: -515px -89px; 
+		}
+	
+	#r3player #addFavourite.added
+	{
+		background:url(../images/addFavourite_added.gif) no-repeat; 
+		cursor:default;
+	}
+
+	#r3player #addFavourite.disabled
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") -515px -159px; 
+		cursor:default;
+	}
+
+#r3player #permalink
+{
+   left:585px;
+   width:32px;
+   height:35px;
+   top:0px;
+}
+	#r3player #permalink
+	{
+		background:url("../../../lib/cbcmusic/images/sprites/player.png") -550px -89px; 
+	}
+	#r3player #permalink:hover,
+	#r3player #permalink:focus
+	{
+		background-position: -550px -124px; 
+	}
+	#r3player #permalink:active
+	{
+		background-position: -550px -89px; 
+	}
+	
+		#r3player #permalink.disabled
+		{
+			background-position: -550px -159px;
+			cursor:default;
+		}
+
+/*****************************************
+* Util and Extras
+*****************************************/			
+			
+.loading
+{
+	background:url(../images/loading.gif) no-repeat center center;
+	height: 50px;
+	width: auto;			
+}
+	#schedulePanel .loading	{ background-image:url(../images/loading_schedulePanel.gif); }	
+	#playlistPanel .loading	{ background-image:url(../images/loading_playlistPanel.gif); }	
+	#trackPanel .loading	{ background-image:url(../images/loading_playlistTracks.gif); }
+	#streamPanel .loading	{ background-image:url(../images/loading_playlistTracks.gif); }
+
+.hidden
+{
+    display:none;
+}
+			
+.clear
+{
+    clear:both;
+}
+
+/* searchlight in-player vote button */
+#playerVoteButton
+{
+    text-indent: inherit;
+    letter-spacing: normal;
+    text-transform: capitalize;
+
+    height: auto;
+    width: auto;
+    right: 115px;
+    top: 5px;
+
+    background-color: #F7FAFF;
+    border: 1px solid #C8DCE5;
+    border-radius: 4px;
+    padding: .2em .7em;
+}
+
+#playerVoteButton.saved,
+#playerVoteButton.disabled
+{
+    background: transparent url("../../../cbcsearchlight/images/searchlight-2015-disabled-tile.png") repeat;
+    color: #C8DCE5;
+}

@@ -1,0 +1,205 @@
+CBCR3.namespace("CBCR3.Stats");
+
+CBCR3.Stats.UI = {
+    mediaTracker: null,
+
+    getMediaTracker: function() {
+        if (this.mediaTracker == null)
+            this.mediaTracker = new CBCR3.Stats.MediaTracker();
+        return this.mediaTracker;
+    }
+};
+
+CBCR3.Stats.MediaTracker = Class.create({
+
+    STREAM_MAX_TIME: 43199, /* used so we can track streams, 43199 is the number used by cbc.ca for live streams */
+    playerName: "r3player",
+    playerpage: "",
+    streamName: "",
+    category: null, /* Entertainment */
+
+    itemMetaData: null, /* stream or playlist name and other info */
+    chapters: null, /* 1 of 1 for continuous */
+    showName: null, /* name of album, show, or genre */
+    itemURL: null,
+    itemType: null, /* radio (main stream),pop,rock,electonic,Concert Name,Program Name,Album Name */
+    audioVideo: null,
+    type: null, /* Continuous, Playlist, Promo, Excerpt, Full program, Webisode, User Generated, Event Coverage, Full Event */
+    timePassed: 0, /* amount of time passed since last sendInfo call */
+    playTimestamp: null,
+
+    totalTime: null,
+    LiveOrDemand: null, /* only used if mediatype = stream: main, hiphop, etc. */
+    eventType: null, /* will be one of the following "PLAY","MID","CLOSE" */
+    progressCounter: 0,
+    progressInterval: 1000,
+    lastTimeInterval: 0, /* will show the last time position to compare to current for a playlist */
+    isPaused: false,
+    pausedOffset: 0,
+    pausedMetaData: null,
+
+    /* static values, will be used by eventType */
+    eventPlay: "PLAY",
+    eventMid: "MID",
+    eventPause: "PAUSE",
+    eventClose: "CLOSE",
+    eventNewStart: "NEWSTART",
+    eventFinish: "FINISH",
+    intCounter: 0,
+
+
+    initialize: function(options) {
+        ;
+    },
+
+    initVars: function(options) {
+        try {
+
+            this.category = options.category; /* Entertainment? */
+            this.itemMetaData = options.itemMetaData; /* Stream name or Playlist Name, "Playlist|Admin|test2|1|2|1|180|Audio|On-Demand" */
+            this.streamName = options.streamName;
+            this.playerpage = parent.getStatsPageName(); //(s_cbc_sitecatalyst.pageName != null) ? s_cbc_sitecatalyst.pageName : "";
+            this.type = options.type; /* Type continuous, playlist, Event Coverage */
+            this.releaseDate = "";
+            this.audioVideo = options.audioVideo;
+            this.showName = options.showName;
+            this.playTimestamp = options.playTimestamp;
+            this.lastTimeInterval = 0;
+            this.chapters = options.chapters;
+
+            this.itemURL = options.itemURL; /* path to stream item, /stream/hiphop or /play/[mp3 path] */
+            this.totalTime = options.totalTime; /* Total length of track, stream (indefinite) */
+            this.LiveOrDemand = options.LiveOrDemand;
+            Trace.write("initVars() - itemMetaData: " + this.itemMetaData);
+            s_cbc_sitecatalyst.Media.open(this.itemMetaData, this.totalTime, this.playerpage);
+        } catch (e) {
+            Trace.write("ERROR in InitVars uistats.js:" + e, true);
+            Trace.error(e);
+        }
+    },
+
+    sendInfo: function(options) {
+        this.intCounter++;
+        Trace.write("uistats.js -> sendInfo()", true);
+        try {
+
+            s_cbc_sitecatalyst.Media.trackVars = "events,products,prop44,prop45,prop46,prop47,prop48,prop49,prop50,eVar23,eVar24,eVar29,eVar39,eVar43,eVar44,eVar45,eVar46,eVar47,eVar48,eVar49,eVar50";
+
+            this.setTrackerType(options.eventType);
+
+            s_cbc_sitecatalyst.products = ";;;;event33=" + options.timePassed;
+            s_cbc_sitecatalyst.pageName = parent.getStatsPageName();
+            s_cbc_sitecatalyst.prop44 = this.streamName;
+            s_cbc_sitecatalyst.prop45 = this.category; /* "CBC Radio 3"; //Category */
+
+            s_cbc_sitecatalyst.prop46 = this.playTimestamp;
+            s_cbc_sitecatalyst.prop47 = this.audioVideo; /* Audio or Video */
+            s_cbc_sitecatalyst.prop48 = this.LiveOrDemand; /* Live or OnDemand */
+            s_cbc_sitecatalyst.prop49 = this.itemMetaData;
+            s_cbc_sitecatalyst.prop50 = this.type; //Show type
+            s_cbc_sitecatalyst.eVar23 = parent.getStatsPageName();  //Player-page
+            s_cbc_sitecatalyst.eVar24 = this.showName; //Show Name, album, genre
+            s_cbc_sitecatalyst.eVar29 = this.type; //Show type 
+
+            s_cbc_sitecatalyst.eVar39 = "+1"; /* play count per user*/
+            s_cbc_sitecatalyst.eVar43 = this.releaseDate; /* date.strftime("%Y-%m-%d %H:%M:%S"); "22/6/2010 18:00:00"; */
+            s_cbc_sitecatalyst.eVar44 = this.streamName; /* //Stream Name */
+            s_cbc_sitecatalyst.eVar45 = this.category; /* Category */
+
+            s_cbc_sitecatalyst.eVar46 = this.playTimestamp;
+            s_cbc_sitecatalyst.eVar47 = this.audioVideo;
+            s_cbc_sitecatalyst.eVar48 = this.LiveOrDemand; /* "On-Demand" or "Live" */
+            s_cbc_sitecatalyst.eVar49 = this.chapters;
+            s_cbc_sitecatalyst.eVar50 = this.totalTime;
+
+        } catch (e) {
+            Trace.write("Error in uistats.js sendInfo() (initialize vars) - " + e, true);
+            Trace.error(e);
+        }
+
+        try {
+            if (options.eventType == this.eventPlay) {
+                Trace.write("^^^ EVENT Play Event ^*^*: " + this.intCounter, true);
+                s_cbc_sitecatalyst.Media.play(this.itemMetaData, options.timeOffset);
+                this.isPaused = false;
+            }
+            if (options.eventType == this.eventMid) {
+                Trace.write("^^^ EVENT Mid Event ^*^*: " + this.intCounter);
+                s_cbc_sitecatalyst.Media.track(this.itemMetaData, options.timeOffset);
+            }
+            if (options.eventType == this.eventPause) {
+                Trace.write("^^^ EVENT Pause Event ^*^*: " + this.intCounter);
+                this.isPaused = true;
+                this.pausedOffset = options.timeOffset;
+                this.pausedMetaData = this.itemMetaData;
+
+                Trace.write("### EVENT timePassed: " + options.timePassed);
+                s_cbc_sitecatalyst.Media.stop(this.itemMetaData, options.timeOffset);
+            }
+
+            if (options.eventType == this.eventNewStart) {
+                if (this.isPaused)
+                    s_cbc_sitecatalyst.Media.stop(this.pausedMetaData, this.pausedOffset);
+
+                s_cbc_sitecatalyst.Media.track(this.pausedMetaData, this.pausedOffset);
+                this.pausedMetaData = null;
+                this.pausedOffset = 0;
+
+            }
+
+            if (options.eventType == this.eventClose) {
+                Trace.write("^^^ EVENT Close Event ^*^*: " + this.intCounter);
+                Trace.write("^^^ timeOffset: " + options.timeOffset);
+                s_cbc_sitecatalyst.Media.stop(this.itemMetaData, options.timeOffset);
+                /*s_cbc_sitecatalyst.Media.track(this.itemMetaData, options.timeOffset);*/
+                s_cbc_sitecatalyst.Media.close(this.itemMetaData);
+
+            }
+        } catch (e) {
+            Trace.write("Error in uistats.js sendInfo() eventCalls - options:" + options + " error:" + e, true);
+            Trace.error(e);
+        }
+    },
+
+    resetProgress: function() {
+        this.progressCounter = 0;
+    },
+
+    getProgressTime: function(thisTimeOffset) {
+        if (this.isPaused)
+            return;
+
+        Trace.write("thisTimeOffset:" + thisTimeOffset + " lastTimeInterval:" + this.lastTimeInterval);
+        var retValue = thisTimeOffset - this.lastTimeInterval;
+        this.lastTimeInterval = thisTimeOffset;
+        return retValue;
+    },
+
+    setTrackerType: function(type) {
+        switch (type) {
+            case this.eventPlay:
+                this.setTrackingEvents("event30,event31,event33");
+                break;
+            case this.eventMid:
+                this.setTrackingEvents("event33");
+                break;
+            case this.eventPause:
+                this.setTrackingEvents("event33");
+                break;
+            case this.eventNewStart:
+                this.setTrackingEvents("event33");
+                break;
+            case this.eventClose: //if a track goes until the end
+                this.setTrackingEvents("event32,event33");
+                break;
+            default:
+                break;
+        }
+    },
+
+    setTrackingEvents: function(strEvents) {
+        Trace.write("^^^ setTrackingEvents: " + strEvents);
+        s_cbc_sitecatalyst.Media.trackEvents = strEvents;
+        s_cbc_sitecatalyst.events = strEvents;
+    }
+});

@@ -1,0 +1,39 @@
+Type.registerNamespace('CBC.Radio3.Music.WebServices');
+CBC.Radio3.Music.WebServices.GearsInfoWebService=function() {
+CBC.Radio3.Music.WebServices.GearsInfoWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Music.WebServices.GearsInfoWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_path();},
+GetTrackInfo:function(urlFriendlyName,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetTrackInfo',false,{urlFriendlyName:urlFriendlyName},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Music.WebServices.GearsInfoWebService.registerClass('CBC.Radio3.Music.WebServices.GearsInfoWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance = new CBC.Radio3.Music.WebServices.GearsInfoWebService();
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_path = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_path(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_path = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_path(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_timeout = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_timeout = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_defaultUserContext = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_defaultUserContext = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_enableJsonp = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_enableJsonp = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Music.WebServices.GearsInfoWebService.set_path("/music/services/GearsInfoWebService.asmx");
+CBC.Radio3.Music.WebServices.GearsInfoWebService.GetTrackInfo= function(urlFriendlyName,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.GearsInfoWebService._staticInstance.GetTrackInfo(urlFriendlyName,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Music.Tasks');
+if (typeof(CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO) === 'undefined') {
+CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO=gtc("CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO");
+CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO.registerClass('CBC.Radio3.Music.Tasks.TrackInfoDisplayDTO');
+}

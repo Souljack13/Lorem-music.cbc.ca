@@ -1,0 +1,11 @@
+CBCR3.namespace("CBCR3.Application");
+CBCR3.Application.Config = {
+applicationPath:'', 
+hostName:'music.cbc.ca', 
+svnRevision: 10595414946, 
+videoPreRollForAudio: true, 
+metadataServicesUrl: 'http://io.music.cbc.ca', 
+authenticated: false, 
+facebookApiKey: '329846753746653', 
+stateGUID: '00000000-0000-0000-0000-000000000000' 
+};

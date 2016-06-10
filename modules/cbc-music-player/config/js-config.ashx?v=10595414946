@@ -1,0 +1,8 @@
+CBCR3.namespace("CBCR3.Player");
+CBCR3.Player.Configuration = {
+connectionStrings:'rtmp://dev03.internal.cbcr3.com/metadata',
+cookieName:'r3volume',
+flashVersion:{full:"10.0.0.0", major:10, minor:0, revision:0},
+flashPath:'/modules/cbc-music-player/flash/',
+helpPath:'/help/help.aspx'
+};

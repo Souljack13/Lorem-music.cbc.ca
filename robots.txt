@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Sitemap: http://music.cbc.ca/sitemap/sitemapindex.ashx
+
+User-agent: *
+Disallow: /*.asmx
+
+User-agent: *
+Disallow: /*.ascx
+
+User-agent: archive.org_bot
+Disallow: /*.asmx

@@ -1,0 +1,39 @@
+Type.registerNamespace('CBC.Radio3.Music.WebServices');
+CBC.Radio3.Music.WebServices.AudioPlayWebService=function() {
+CBC.Radio3.Music.WebServices.AudioPlayWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Music.WebServices.AudioPlayWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_path();},
+GetRecentAudioPlays:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetRecentAudioPlays',false,{},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Music.WebServices.AudioPlayWebService.registerClass('CBC.Radio3.Music.WebServices.AudioPlayWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance = new CBC.Radio3.Music.WebServices.AudioPlayWebService();
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_path = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_path(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_path = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_path(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_timeout = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_timeout = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_defaultUserContext = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_defaultUserContext = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_enableJsonp = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_enableJsonp = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Music.WebServices.AudioPlayWebService.set_path("/music/services/AudioPlayWebService.asmx");
+CBC.Radio3.Music.WebServices.AudioPlayWebService.GetRecentAudioPlays= function(onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AudioPlayWebService._staticInstance.GetRecentAudioPlays(onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Music.DataTransfer');
+if (typeof(CBC.Radio3.Music.DataTransfer.RecentAudioPlayDTO) === 'undefined') {
+CBC.Radio3.Music.DataTransfer.RecentAudioPlayDTO=gtc("CBC.Radio3.Music.DataTransfer.RecentAudioPlayDTO");
+CBC.Radio3.Music.DataTransfer.RecentAudioPlayDTO.registerClass('CBC.Radio3.Music.DataTransfer.RecentAudioPlayDTO');
+}

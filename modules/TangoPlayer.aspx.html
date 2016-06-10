@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title>
+    
+    <script language="javascript" type="text/javascript">
+
+        var myDomain = window.location.hostname;
+        var isLive = myDomain.indexOf("cbc.ca");
+        if (isLive > -1) { document.domain = "cbc.ca"; }
+
+    </script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.2.0/prototype.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.17/store.min.js"></script>
+    
+    <script src="../lib/cbcmusic/js/commons/r3core.js"></script>
+    <script src="../lib/cbcmusic/js/commons/eventdispatcher.js"></script>
+    <script src="../lib/cbcmusic/js/commons/events.js"></script>
+    
+    <!--All of the script below should be bundled -->
+
+    <!-- Vanilla JS Ajax functions -->
+    <script type="text/javascript">
+        //Below from: http://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
+        //Had to use this, since the Prototype.js AJAX functionality doesn't support cross origin requests.
+
+        var ajax = {};
+        ajax.x = function () {
+            if (typeof XMLHttpRequest !== 'undefined') {
+                return new XMLHttpRequest();
+            }
+            var versions = [
+                "MSXML2.XmlHttp.6.0",
+                "MSXML2.XmlHttp.5.0",
+                "MSXML2.XmlHttp.4.0",
+                "MSXML2.XmlHttp.3.0",
+                "MSXML2.XmlHttp.2.0",
+                "Microsoft.XmlHttp"
+            ];
+
+            var xhr;
+            for (var i = 0; i < versions.length; i++) {
+                try {
+                    xhr = new ActiveXObject(versions[i]);
+                    break;
+                } catch (e) {
+                }
+            }
+            return xhr;
+        };
+
+        ajax.send = function (url, callback, method, data, sync) {
+            var x = ajax.x();
+            x.open(method, url, sync);
+            x.onreadystatechange = function () {
+                if (x.readyState == 4) {
+                    if (x.status == 200) {
+                        callback(x.responseText);
+                    } else {
+                        console.log('ajax.send: request failed - ' + x.status);
+                    }
+                }
+            };
+            if (method == 'POST') {
+                x.setRequestHeader('Content-type', 'application/json');
+            }
+            x.send(data);
+        };
+
+        ajax.get = function (url, data, callback, sync) {
+            var query = [];
+            for (var key in data) {
+                query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+            }
+            ajax.send(url + (query.length ? '?' + query.join('&') : ''), callback, 'GET', null, sync);
+        };
+
+        ajax.post = function (url, data, callback, sync) {
+            var query = [];
+            //for (var key in data) {
+            //    query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+            //}
+            var jsonString = JSON.stringify(data);
+            ajax.send(url, callback, 'POST', jsonString, sync);
+        };
+    </script>
+    
+    <script type="text/javascript">
+
+        var TangoDJClient = Class.create(CBCR3.Commons.EventDispatcher, {
+
+            _djBaseUrl: 'https://services.radio-canada.ca/music/dj/v1',
+            //_djBaseUrl: 'http://localhost:53138/v1',
+            _userIdKey: 'TANGO_DJ_USERID',
+            _userId: '',
+
+            initialize: function () {
+                if (!store.enabled) {
+                    //console.log('store not initialized');
+                }
+                
+                this._userId = this.getUserId();
+                //console.log('user id: ' + this._userId);
+            },
+
+            getUserId_callback: function(responseText, client) {
+                client._userId = responseText.replace(/"/g,"");
+                //console.log('userId retrieved and set: ' + client._userId);
+                store.set(client._userIdKey, client._userId);
+            },
+            
+            getUserId: function(callback) {
+                if (this._userId != null && this._userId !== '') {
+                    return this._userId;
+                }
+
+                var fromBrowserStorage = store.get(this._userIdKey);
+                if (fromBrowserStorage != null && fromBrowserStorage !== '') {
+                    this._userId = fromBrowserStorage;
+                    return fromBrowserStorage;
+                }
+
+                var that = this;
+                ajax.get(this._djBaseUrl + '/uid', {}, function (responseText) { that.getUserId_callback(responseText, that); },true);
+            },
+
+            getTrackList: function(stationId, callback) {
+                //console.log('DJ Client: getting track list');
+
+                ajax.get(this._djBaseUrl + '/playlists/' + stationId + '?userId='+ this._userId + '&platformId=2', {}, function(responseText) {
+                    var trackList = JSON.parse(responseText);
+                    //console.log('DJ Client: track list received');
+                    callback(trackList.tracks);
+                },true);
+                
+            },
+
+            logTrackPlayback: function(trackId, webRadioId) {
+                var postParams = {
+                    'UserId': this.getUserId(),
+                    'TrackId': trackId,
+                    'SourceId': 2,
+                    'WebRadioId': webRadioId
+                };
+
+                //console.log('logging playback for track: ' + trackId);
+                ajax.post(this._djBaseUrl + '/playbacklog' , postParams, function(responseText) {
+                    //console.log('Playback logged: ' + responseText);
+                },true);
+            }
+
+        }
+        );
+
+        CBCR3.namespace("CBCR3.Player.External");
+
+        //Very long-winded, but easier to debug with little time for implementation and release
+        //Also, need this code to load as quickly as possible
+        CBCR3.Player.External.SRCPlayerController = Class.create(CBCR3.Commons.EventDispatcher, {
+            _playerID: 'RCPlayerInstance',
+            
+            _playerIsPlaying: false,
+            _playerIsPaused: false,
+            _playbackStartRequested: false,
+            
+            _djClient: null,
+            
+            _currentTrackList: null,
+            _currentTrackIndex: -1,
+            _currentlyPlayingStation: -1,
+            _currentlyPlayingStationCallsign: null,
+            
+            TRACKLIST_LENGTH: 9,
+            _stationMap: {'CBC_HIPHOP_H': 30, 'CBC_GGSAMP_H':{'ID': 15, 'isClassical': true}, 'CBC_70S001_H': 34, 'CBC_80S001_H': 12, 'CBC_GUITAR_H': 31, 'CBC_BLCLAS_H':39, 'CBC_SADSNG_H':23, 'CBC_JAZMAS_H':21, 'CBC_CHILL1_H':41, 'CBC_ABORIG_H':37, 'CBC_ROCKCL_H':36, 'CBC_JUKEBO_H':22, 'CBC_CLSCRY_H':28, 'CBC_JAZSMO_H':40, 'CBC_REGGAE_H':44, 'CBC_90S001_H':13, 'CBC_WORLDM_H':47, 'CBC_BLUES1_H':32, 'CBC_OPERAT_H':{'ID': 18, 'isClassical': true}, 'CBC_CHORAL_H':{'ID': 48, 'isClassical': true}, 'CBC_KIDCBC_H':38,'CBC_DROOTS_H':9,'CBC_SERENE_H':{'ID': 17, 'isClassical': true},'CBC_SOULCL_H':4,'CBC_R2JAZZ_H':25,'CBC_NEWWAV_H':24,'CBC_R2CLAS_H':{'ID': 11, 'isClassical': true},'CBC_DRIVE1_H':42,'CBC_BAROQU_H':{'ID': 26, 'isClassical': true},'CBC_PIANO1_H':{'ID': 27, 'isClassical': true},'CBC_ECLASS_H':{'ID': 19, 'isClassical': true},'CBC_CANSON_H':2,'CBC_SIGNAL_H':7,'CBC_SINSON_H':5,'CBC_JAZSON_H':14,'CBC_ORCHES_H':{'ID': 10, 'isClassical': true},'CBC_INDIE1_H':3,'CBC_RBSOUL_H':43,'CBC_CONTRY_H':35,'CBC_WRKOUT_H':29,'CBC_ADLTAL_H':1,'CBC_ADLTPO_H':8,'CBC_ROCK01_H':6,'CBC_POP040_H':46,'CBC_JAZCDN_H':20,'CBC_SPCIAL_H': 217, 'CBC_CANCOM_H': {'ID': 33, 'isClassical': true}, 'CBC_SPCIA2_H': 50},//{'CBC_HIPHOP_H': 30, 'CBC_GGSAMP_H':15},
+            
+            _stationsToAccept: ['CBC_HIPHOP_H', 'CBC_GGSAMP_H', 'CBC_70S001_H', 'CBC_80S001_H', 'CBC_SPCIAL_H', 'CBC_GUITAR_H', 'CBC_BLCLAS_H', 'CBC_SADSNG_H', 'CBC_JAZMAS_H', 'CBC_CHILL1_H', 'CBC_ABORIG_H', 'CBC_ROCKCL_H', 'CBC_JUKEBO_H', 'CBC_CLSCRY_H', 'CBC_JAZSMO_H', 'CBC_REGGAE_H', 'CBC_90S001_H', 'CBC_WORLDM_H', 'CBC_BLUES1_H', 'CBC_OPERAT_H', 'CBC_CHORAL_H', 'CBC_KIDCBC_H','CBC_DROOTS_H','CBC_SERENE_H','CBC_SOULCL_H','CBC_R2JAZZ_H','CBC_NEWWAV_H','CBC_R2CLAS_H','CBC_DRIVE1_H','CBC_BAROQU_H','CBC_PIANO1_H','CBC_ECLASS_H','CBC_CANSON_H','CBC_SIGNAL_H','CBC_SINSON_H','CBC_JAZSON_H','CBC_ORCHES_H','CBC_INDIE1_H','CBC_RBSOUL_H','CBC_CONTRY_H','CBC_WRKOUT_H','CBC_ADLTAL_H','CBC_ADLTPO_H','CBC_ROCK01_H','CBC_POP040_H','CBC_JAZCDN_H', 'CBC_CANCOM_H', 'CBC_SPCIA2_H'],//['CBC_HIPHOP_H', 'CBC_GGSAMP_H'],
+
+            _logCount: 0,
+            _logToConsole: false,
+            _metadataUpdateInterval: null,
+
+            initialize: function (options) {
+
+                this.configureRCPlayerEvents();
+                this.initRCPlayer(options);
+
+                this._djClient = new TangoDJClient();
+                
+            },
+
+            initRCPlayer: function (options) {
+                var idClient = options.idClient || 'musiccbcca';
+                var backgroundPlayerElId = 'srcPlayerConsoleElem';
+
+                var defaultMedia = {
+                    appCode: 'wamen',
+                    id: '28364'
+                };
+
+                var pji = {
+                    appCode: defaultMedia.appCode,
+                    idMedia: defaultMedia.id,
+                    params: {
+                        isSeekable: false,
+                        infoBar: true,
+                        controlBar: true,
+                        canExtract: false,
+                        canFullScreen: false,
+                        // canChangeMBR:false,    //...this breaks mobile play
+                        next: true,
+                        isNextable: true,
+                        previous: true,
+                        isPreviousable: true,
+                        share: false,
+                        autoplay: false,
+                        width: 1,
+                        height: 1,
+                        video: false,
+                        idConsoleContainer: backgroundPlayerElId,
+                        eventReady: 'onRCPlayerReady',
+                        id: this._playerID
+                    }
+                };
+                var playerScriptUrl = '//api.radio-canada.ca/cav/v1/' + idClient + '/?pji=' + JSON.stringify(pji);
+                var playerScriptElement = document.createElement('script');
+                playerScriptElement.src = playerScriptUrl;
+                document.getElementsByTagName('head')[0].appendChild(playerScriptElement);
+
+                this.RCPlayerLog('initRCPlayer', 'Player script inserted');
+            },
+
+            configureRCPlayerEvents: function () {
+
+                var handleStartFunction = this.handlePlayerStartEvent;
+                var trackEndedFunction = this.handleTrackEndEvent;
+                var playbackErrorFunction = this.handlePlayerErrorEvent;
+
+                var playerID = this._playerID;
+                var that = this;
+
+                window.onRCPlayerReady = function () {
+
+                    //console.log('***onRCPlayerReady: player ready***');
+                    that.RCPlayerLog('onRCPlayerReady', 'Player ready fired');
+
+                    // eventMappings maps an RCPlayer event to either:
+                    // {string} a cbcmusic event to be fired
+                    // {function} an arbitrary method to be called
+                    var eventMappings = {
+                        'start': function(msg) { handleStartFunction(msg, that, 'start'); },
+                        'pubStarted': function (msg) { handleStartFunction(msg, that, 'pubStarted'); },
+                        //'currentTime': C.EVENT.BACKGROUND_PLAYER.PLAYBACK_TIME,
+                        'pubCompleted': function (msg) { trackEndedFunction(msg, that, 'pubCompleted'); },
+                        'error': function(msg) { playbackErrorFunction(msg, that, 'error'); },
+                        //'pause': _handleRemotePause,
+                        //'play': _handleRemotePlay,
+                    };
+
+                    for (var key in eventMappings) {
+                        var handler = eventMappings[key];
+
+                        window.srcPlayer('addEventListener', {
+                            eventName: key,
+                            callback: handler
+                        }, playerID);
+                    }
+
+                    that.RCPlayerLog('onRCPlayerReady', 'Player ready completed');
+                };
+
+                this.RCPlayerLog('configureRCPlayerEvents', 'Player events configured');
+            },
+
+            isPlaying: function() {
+                return this._playerIsPlaying;
+            },
+
+            //This should be handled within this "class", but this is fine for now
+            setIsPlaying: function(isPlaying) {
+                this._playerIsPlaying = isPlaying;
+            },
+
+            isPaused: function() {
+                return this._playerIsPaused;
+            },
+
+            setIsPaused: function(isPaused) {
+                this._playerIsPaused = isPaused;
+            },
+
+            /*Player Event Handlers*/
+
+            handlePlayerStartEvent: function (msg, controller, eventName) {
+                
+                controller.RCPlayerLog('handlePlayerStartEvent', 'player start event handled ');
+                
+                controller.setIsPlaying(true);
+                controller.setIsPaused(false);
+                controller._isLoading = false;
+                controller._playbackStartRequested = false;
+
+                controller.updatePlayerWithCurrentTrack();
+                controller.showLoading(false);
+                
+                var curTrack = controller._currentTrackList[controller._currentTrackIndex];
+
+                //Log the track playback
+                if (curTrack.trackTypeId == 1) {
+                    controller._djClient.logTrackPlayback(curTrack.wamId, curTrack.webRadioId);
+                }
+                else if (curTrack.trackTypeId == 2) {
+                    controller.RCPlayerLog('handlePlayerStartEvent', 'track is station id - not logging ');
+                }
+
+                controller.RCPlayerLog('handlePlayerStartEvent', 'player start event handler finished ');
+            },
+
+            handleTrackEndEvent: function (msg, controller, eventName) {
+                controller.RCPlayerLog('handleTrackEndEvent', 'track end event handled ');
+
+                if (controller._isLoading) {
+                    controller.RCPlayerLog('handleTrackEndEvent', 'player is already loading a track');
+                    return;
+                }
+
+                //Get another track, or playlist
+                if (controller._currentTrackIndex == (controller.TRACKLIST_LENGTH - 1)) {
+                    controller.RCPlayerLog('handleTrackEndEvent', 'requesting new playlist');
+                    
+                    controller.getNewTrackList(controller._currentlyPlayingStation);
+                } 
+                else {
+
+                    controller.RCPlayerLog('handleTrackEndEvent', 'player is not loading, loading next track');
+                    controller._currentTrackIndex = controller._currentTrackIndex + 1; 
+                    var curTrack = controller._currentTrackList[controller._currentTrackIndex];
+                    controller.changeMedia(curTrack);
+                }
+
+                controller.RCPlayerLog('handleTrackEndEvent', 'track end event handler finished ');
+            },
+
+            handlePlayerErrorEvent: function (msg, controller, eventName) {
+                controller.RCPlayerLog('handlePlayerErrorEvent', 'track error event handled');
+                controller.RCPlayerLog('handlePlayerErrorEvent', msg);
+            },
+
+            /*END Player Event Handlers*/
+
+            nextTrack: function() {
+                //Get another track, or playlist
+                if (this._currentTrackIndex == (this.TRACKLIST_LENGTH - 1)) {
+                    this.RCPlayerLog('handleTrackEndEvent', 'requesting new playlist');
+                    
+                    this.getNewTrackList(this._currentlyPlayingStation);
+                    
+                } 
+                else {
+                    
+                    if (this._isLoading)
+                        return;
+
+                    this.RCPlayerLog('nextTrack', 'player is not loading, loading next track');
+                    
+                    this._currentTrackIndex = this._currentTrackIndex + 1;
+                    //this._currentTrackIndex = (trackIndex > 0) ? trackIndex : this._currentTrackIndex;
+
+                    this.RCPlayerLog('nextTrack', 'new track index: ' + this._currentTrackIndex);
+
+                    var curTrack = this._currentTrackList[this._currentTrackIndex];
+                    this.changeMedia(curTrack);
+                }  
+            },
+
+            seekToEnd: function() {
+                var curTrack = this._currentTrackList[this._currentTrackIndex];
+                var newTrackDuration = curTrack.duration - 15000;
+                window.srcPlayer('seek', {'time': newTrackDuration }, this._playerID);
+            },
+
+            getNewTrackList: function(webRadioId) {
+                var that = this;
+                this._isLoading = true;
+                this._djClient.getTrackList(webRadioId,function(newTrackList) { that.startPlaybackWithNewTrackList(newTrackList,that); } );  
+            },
+
+            getStationId: function(stationCallSign) {
+                var stationMapSetting, stationId;
+
+                if (null == stationCallSign || stationCallSign == '')
+                    return -1;
+                
+                stationMapSetting = this._stationMap[stationCallSign];
+                if (typeof stationMapSetting === 'object') {
+                    stationId = stationMapSetting.ID;
+                } else {
+                    stationId = stationMapSetting;
+                }
+                return stationId;
+            },
+
+            isStationClassical: function(stationCallSign) {
+                var stationMapSetting;
+
+                if (null == stationCallSign || stationCallSign == '')
+                    return -1;
+
+                stationMapSetting = this._stationMap[stationCallSign];
+                if (typeof stationMapSetting === 'object' && stationMapSetting.isClassical) {
+                    return stationMapSetting.isClassical;
+                }
+
+                return false;
+            },
+
+            changeMedia: function (wamTrack) {
+                
+                this.RCPlayerLog('changeMedia', 'called: ' + wamTrack.wamId);
+                
+                var pji = {
+                    appCode: wamTrack.applicationCode,
+                    idMedia: wamTrack.wamId,
+                    params: {
+                        autoPlay: true,
+                        isPreviousable: false,
+                        isNextable: true,
+                        time: 0
+                    }
+                };
+
+                window.srcPlayer('change', pji, this._playerID);
+
+                this._isLoading = true;
+
+                return true;
+            },
+
+            pause: function() {
+                this.RCPlayerLog('pause', 'called');
+
+                if (this._isLoading) {
+                    this.RCPlayerLog('pause', 'is loading');
+                    return;
+                }
+
+                if (!this.isPlaying()) {
+                    this.RCPlayerLog('pause', 'not playing');
+                    return;
+                }
+
+                window.srcPlayer('pause', null, this._playerID);
+
+                this.setIsPlaying(false);
+                this.setIsPaused(true);
+                this._playbackStartRequested = false;
+            },
+
+            play: function () {
+                this.RCPlayerLog('play', 'called');
+
+                if (this._isLoading) {
+                    this.RCPlayerLog('play', 'is loading');
+                    return;
+                }
+                
+                if (this.isPlaying()) {
+                    this.RCPlayerLog('play', 'is already playing');
+                    return;
+                }
+
+                window.srcPlayer('play', null, this._playerID);
+
+                
+                this.setIsPlaying(true);
+                this.setIsPaused(false);
+
+                this._playbackStartRequested = false;
+            },
+
+            startPlaybackWithNewTrackList: function(newTrackList, controller) {
+                this.RCPlayerLog('startPlaybackWithNewTrackList', 'called');
+                
+                controller._currentTrackList = newTrackList;
+                controller._currentTrackIndex = 0;
+
+                var curTrack = controller._currentTrackList[controller._currentTrackIndex];
+
+                controller.changeMedia(curTrack);
+                
+            },
+
+            startPlayback: function(stationCallSign) {
+                
+                if (this.isPlaying() && !this.stationChanged(stationCallSign)) {
+                    this.RCPlayerLog('startPlayback', 'already playing');
+
+                    return;
+                }
+
+                if (this._playbackStartRequested) {
+                    this.RCPlayerLog('startPlayback', 'playback start already requested');
+                    return;
+                }
+
+                this._playbackStartRequested = true;
+
+                if (this._isLoading) {
+                    this.RCPlayerLog('startPlayback', 'is loading');
+                    return;
+                }
+
+                if (this.isPaused() && !this.stationChanged(stationCallSign)) {
+                    this.play();
+                    this.RCPlayerLog('startPlayback', 'resuming from pause');
+                    return;
+                }
+
+                //Get a set of tracks if we have no tracks
+                if (this.stationChanged(stationCallSign) || this._currentTrackList == null) {
+
+                    if (this._isLoading) {
+                        this.RCPlayerLog('startPlayback', 'already loading tracks');
+                        return;
+                    }
+
+                    var webRadioId = this.getStationId(stationCallSign);
+                    this._currentlyPlayingStation = webRadioId;
+                    this._currentlyPlayingStationCallsign = stationCallSign;
+
+                    //Provide some feedback to the user while the tracklist is fetched
+                    this.showLoading(true);
+
+                    var that = this;
+                    clearInterval(this._metadataUpdateInterval);
+                    
+                    //When the page in the client frame is changed, the player info is not updated
+                    this._metadataUpdateInterval = setInterval( function() { that.updateMetadata(that); }, 2000);
+
+                    this.getNewTrackList(webRadioId);
+                }  
+            },
+
+            adjustVolume: function(volumeLevel) {
+                this.RCPlayerLog('adjustVolume', 'called');
+                
+                if (volumeLevel < 0)
+                    return;
+
+                var adjustedLevel = volumeLevel == 0? 0 : (volumeLevel / 100);
+                
+                window.srcPlayer('setVolume', { "volume": adjustedLevel }, this._playerID);  
+            },
+
+            updatePlayerWithCurrentTrack: function() {
+                var artistName = '', trackTitle = '', composerName = '', trackTitleToDisplay='', artistToDisplay='';
+                var curTrack = this._currentTrackList[this._currentTrackIndex];
+
+                artistName = curTrack.trackTypeId == 1 ? curTrack.performers : '';
+                trackTitle = curTrack.trackTypeId == 1 ? curTrack.trackTitle : curTrack.title;
+                composerName = curTrack.trackTypeId == 1 ? curTrack.composers : '';
+
+                trackTitleToDisplay = trackTitle;
+                artistToDisplay = artistName;
+
+                if (this.isStationClassical(this._currentlyPlayingStationCallsign)) {
+                    trackTitleToDisplay = composerName + ': ' + trackTitle;
+                }
+
+                this.updatePlayerDisplay(artistToDisplay, trackTitleToDisplay, '', '');
+            },
+
+            updatePlayerDisplay: function(artistName, trackTitle, composerName, stationName) {
+                var r3PlayerInst = parent.window.r3PlayerBootStrap.clientFrame.playerInstanceService.getInstance();
+
+                //r3PlayerInst.trackDisplay.setDisplay('Artist name', 'Track title', '', '', '', false, 'composer name', '');
+                r3PlayerInst.trackDisplay.setDisplay(artistName, trackTitle, '', '', '', false, composerName, '');
+                r3PlayerInst.trackDisplay.startTextScroll(5000);
+                //The original playback code handles this well enough for now...
+                //r3PlayerInst.progressScrubber.displayStreamInfo(stationName);
+            },
+
+            updatePlayerButtonState: function() {
+                var r3PlayerInst = parent.window.r3PlayerBootStrap.clientFrame.playerInstanceService.getInstance();
+
+                r3PlayerInst.playPause.setIsPlaying(true);  
+            },
+
+            showLoading: function(displayLoading) {
+                try {
+                    var r3PlayerInst = parent.window.r3PlayerBootStrap.clientFrame.playerInstanceService.getInstance();
+                    if (displayLoading) {
+                        this.updatePlayerDisplay('', 'Loading...', '', '');
+                        r3PlayerInst.playPause.disable();
+                    } else {
+                        r3PlayerInst.playPause.enable();
+                    }
+                } catch (e) {
+                    this.RCPlayerLog('showLoading', 'error');
+                }
+            },
+
+            updateMetadata: function(controller) {
+                try {
+                    if (!controller.isPlaying())
+                        return;
+                    
+                    controller.updatePlayerWithCurrentTrack();
+                    controller.updatePlayerButtonState();
+                } catch (e) {
+                    controller.RCPlayerLog('updateMetadata', 'error');
+                    
+                }
+            },
+
+            getStationCallSign: function(commandArgs) {
+                var callSign='';
+
+                if (typeof commandArgs === 'undefined' || typeof commandArgs !== 'object')
+                    return 'none';
+
+                callSign = commandArgs.rtmpName;
+
+                return callSign;
+            },
+            
+            isAcceptableStation: function(stationCallSign) {
+                
+                return (this._stationsToAccept.indexOf(stationCallSign) != -1);
+            },
+
+            stationChanged: function(stationCallsign) {
+                if (null == this._currentlyPlayingStationCallsign)
+                    return true;
+
+                if (this._currentlyPlayingStationCallsign !== stationCallsign)
+                    return true;
+
+                return false;
+            },
+
+            //Had a nicer way of doing this (see commented class below), but it was complicating debugging
+            acceptStreamCommand: function(commandName, commandArgs) {
+                if (commandName === 'streamCommand:kill') {
+                    this.pause();
+                } 
+                else if (commandName === 'streamCommand:load') {
+                    
+                    var stationCallsign = this.getStationCallSign(commandArgs);
+                    if (!this.isAcceptableStation(stationCallsign))
+                        return false;
+
+                    this.startPlayback(stationCallsign);
+
+                    return true;
+
+                }
+                else if (commandName === 'streamCommand:stop') {
+
+                    this.pause();
+                }
+                else if (commandName === 'streamCommand:volume') {
+                    
+                    this.adjustVolume(commandArgs);
+                }
+                
+                return false;
+            },
+
+            logStreamCommand: function(commandName, commandArgs) {
+                var commandArgsString = '';
+                if (commandArgs != null && typeof commandArgs === 'object') {
+                    commandArgsString = JSON.stringify(commandArgs);
+                } else {
+                    commandArgsString = commandArgs;
+                }
+
+                this.RCPlayerLog('sendStreamCommand', 'commandName: ' + commandName + ' commandArgs: ' + commandArgsString);
+            },
+
+            RCPlayerLog: function (functionName, msg) {
+                this._logCount++;
+                if(this._logToConsole)
+                    console.log(this._logCount + '. SRCPlayerController::' + functionName + ' - ' + msg);
+            },
+
+            enableDebug: function(enable) {
+                this._logToConsole = enable;
+            },
+
+            playTestTrack: function() {
+                this.changeMedia({'appCode':'wamen', 'id':28371});
+            },
+
+        });
+        
+    </script>
+    <style type="text/css">
+        .centeredDiv {
+            width:1000px;
+            background-color:#1a1a1a;
+            margin-left: auto;
+            margin-right: auto;
+            display:block;
+            position:relative;
+            left:-8px;
+            -moz-box-shadow:0px 0px 3px 0px #888;
+            -webkit-box-shadow: 0px 0px 3px 0px #888;
+            box-shadow:0px 0px 3px 0px #888;
+        }
+    </style>
+</head>
+<body style="width: 100%;height: 15px;">
+    <div style="background-color: #e6e6e6;">
+        <div id="srcPlayerConsoleElem" class="centeredDiv"></div>
+        <div id="headerNavContainer" class="centeredDiv">
+            <iframe id="gniframe" src="http://www.cbc.ca/i/o/globalnav/v10/ext/headercore.html" width="1000" allowtransparency="true" height="45" scrolling="no" frameborder="0"></iframe>
+        </div>
+    </div>
+    <form name="form1" method="post" action="TangoPlayer.aspx.html" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTQwMDkwNTc1NGRk" />
+
+    </form>
+    <script type="text/javascript">
+        document.observe("dom:loaded", function () {
+            window.SRCPlayerController = new CBCR3.Player.External.SRCPlayerController({});
+        });
+    </script>
+</body>
+</html>

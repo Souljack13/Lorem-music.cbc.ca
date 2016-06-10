@@ -1,0 +1,84 @@
+Type.registerNamespace('CBC.Radio3.Blogs.UI.Web.WebServices');
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService=function() {
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_path();},
+GetAllBlogPosts:function(date,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetAllBlogPosts',false,{date:date},succeededCallback,failedCallback,userContext); },
+GetBlogPost:function(permalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetBlogPost',false,{permalink:permalink},succeededCallback,failedCallback,userContext); },
+GetFeederItems:function(category,pageNumber,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetFeederItems',false,{category:category,pageNumber:pageNumber},succeededCallback,failedCallback,userContext); },
+GetBlogPostCommentsByEntryId:function(blogEntryId,startSequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetBlogPostCommentsByEntryId',false,{blogEntryId:blogEntryId,startSequence:startSequence},succeededCallback,failedCallback,userContext); },
+GetBlogEntries:function(category,pageNum,pageSize,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetBlogEntries',false,{category:category,pageNum:pageNum,pageSize:pageSize},succeededCallback,failedCallback,userContext); },
+GetPostsForCategory:function(categoryId,pageNumber,numPerPage,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPostsForCategory',false,{categoryId:categoryId,pageNumber:pageNumber,numPerPage:numPerPage},succeededCallback,failedCallback,userContext); },
+PostComment:function(blogPostAjaxComment,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'PostComment',false,{blogPostAjaxComment:blogPostAjaxComment},succeededCallback,failedCallback,userContext); },
+GetBlogPostComments:function(permalink,startSequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetBlogPostComments',false,{permalink:permalink,startSequence:startSequence},succeededCallback,failedCallback,userContext); },
+DeleteComment:function(commentId,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'DeleteComment',false,{commentId:commentId},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.registerClass('CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance = new CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService();
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_path = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_path(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_path = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_path(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_timeout = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_timeout = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_defaultUserContext = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_defaultUserContext = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_enableJsonp = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_enableJsonp = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.set_path("/blogs/services/BlogWebService.asmx");
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetAllBlogPosts= function(date,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetAllBlogPosts(date,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetBlogPost= function(permalink,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetBlogPost(permalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetFeederItems= function(category,pageNumber,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetFeederItems(category,pageNumber,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetBlogPostCommentsByEntryId= function(blogEntryId,startSequence,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetBlogPostCommentsByEntryId(blogEntryId,startSequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetBlogEntries= function(category,pageNum,pageSize,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetBlogEntries(category,pageNum,pageSize,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetPostsForCategory= function(categoryId,pageNumber,numPerPage,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetPostsForCategory(categoryId,pageNumber,numPerPage,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.PostComment= function(blogPostAjaxComment,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.PostComment(blogPostAjaxComment,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.GetBlogPostComments= function(permalink,startSequence,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.GetBlogPostComments(permalink,startSequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService.DeleteComment= function(commentId,onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.BlogWebService._staticInstance.DeleteComment(commentId,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Blogs.DataTransfer');
+if (typeof(CBC.Radio3.Blogs.DataTransfer.BlogPostArchiveContentDTO) === 'undefined') {
+CBC.Radio3.Blogs.DataTransfer.BlogPostArchiveContentDTO=gtc("CBC.Radio3.Blogs.DataTransfer.BlogPostArchiveContentDTO");
+CBC.Radio3.Blogs.DataTransfer.BlogPostArchiveContentDTO.registerClass('CBC.Radio3.Blogs.DataTransfer.BlogPostArchiveContentDTO');
+}
+Type.registerNamespace('CBC.Radio3.Blogs.Domain');
+if (typeof(CBC.Radio3.Blogs.Domain.BlogEntry) === 'undefined') {
+CBC.Radio3.Blogs.Domain.BlogEntry=gtc("CBC.Radio3.Blogs.Domain.BlogEntry");
+CBC.Radio3.Blogs.Domain.BlogEntry.registerClass('CBC.Radio3.Blogs.Domain.BlogEntry');
+}
+if (typeof(CBC.Radio3.Blogs.DataTransfer.BlogCommentDTO) === 'undefined') {
+CBC.Radio3.Blogs.DataTransfer.BlogCommentDTO=gtc("CBC.Radio3.Blogs.DataTransfer.BlogCommentDTO");
+CBC.Radio3.Blogs.DataTransfer.BlogCommentDTO.registerClass('CBC.Radio3.Blogs.DataTransfer.BlogCommentDTO');
+}
+if (typeof(CBC.Radio3.Blogs.DataTransfer.BlogPostListDTO) === 'undefined') {
+CBC.Radio3.Blogs.DataTransfer.BlogPostListDTO=gtc("CBC.Radio3.Blogs.DataTransfer.BlogPostListDTO");
+CBC.Radio3.Blogs.DataTransfer.BlogPostListDTO.registerClass('CBC.Radio3.Blogs.DataTransfer.BlogPostListDTO');
+}
+if (typeof(CBC.Radio3.Blogs.DataTransfer.BlogPostAjaxCommentAddDTO) === 'undefined') {
+CBC.Radio3.Blogs.DataTransfer.BlogPostAjaxCommentAddDTO=gtc("CBC.Radio3.Blogs.DataTransfer.BlogPostAjaxCommentAddDTO");
+CBC.Radio3.Blogs.DataTransfer.BlogPostAjaxCommentAddDTO.registerClass('CBC.Radio3.Blogs.DataTransfer.BlogPostAjaxCommentAddDTO');
+}
+if (typeof(CBC.Radio3.Blogs.Domain.BlogComment) === 'undefined') {
+CBC.Radio3.Blogs.Domain.BlogComment=gtc("CBC.Radio3.Blogs.Domain.BlogComment");
+CBC.Radio3.Blogs.Domain.BlogComment.registerClass('CBC.Radio3.Blogs.Domain.BlogComment');
+}

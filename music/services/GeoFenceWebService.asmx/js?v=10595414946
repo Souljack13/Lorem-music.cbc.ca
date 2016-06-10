@@ -1,0 +1,33 @@
+Type.registerNamespace('CBC.Radio3.Blogs.UI.Web.WebServices');
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService=function() {
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_path();},
+IsCanadianIpAddress:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'IsCanadianIpAddress',false,{},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.registerClass('CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance = new CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService();
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_path = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_path(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_path = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_path(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_timeout = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_timeout = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_defaultUserContext = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_defaultUserContext = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_enableJsonp = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_enableJsonp = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.set_path("/music/services/GeoFenceWebService.asmx");
+CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService.IsCanadianIpAddress= function(onSuccess,onFailed,userContext) {CBC.Radio3.Blogs.UI.Web.WebServices.GeoFenceWebService._staticInstance.IsCanadianIpAddress(onSuccess,onFailed,userContext); }

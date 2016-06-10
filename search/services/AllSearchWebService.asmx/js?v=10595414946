@@ -1,0 +1,80 @@
+Type.registerNamespace('CBC.Radio3.Music.WebServices');
+CBC.Radio3.Music.WebServices.AllSearchWebService=function() {
+CBC.Radio3.Music.WebServices.AllSearchWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Music.WebServices.AllSearchWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_path();},
+GetAllSearchResults:function(searchTerm,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetAllSearchResults',false,{searchTerm:searchTerm},succeededCallback,failedCallback,userContext); },
+GetArtistsList:function(searchTerm,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArtistsList',false,{searchTerm:searchTerm},succeededCallback,failedCallback,userContext); },
+GetVideosList:function(searchTerm,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetVideosList',false,{searchTerm:searchTerm},succeededCallback,failedCallback,userContext); },
+GetProgramsSearchList:function(searchDto,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetProgramsSearchList',false,{searchDto:searchDto},succeededCallback,failedCallback,userContext); },
+GetArticlesSearchList:function(searchDto,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetArticlesSearchList',false,{searchDto:searchDto},succeededCallback,failedCallback,userContext); },
+GetVideosSearchList:function(searchDto,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetVideosSearchList',false,{searchDto:searchDto},succeededCallback,failedCallback,userContext); },
+GetVideoByPermalink:function(permalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetVideoByPermalink',false,{permalink:permalink},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Music.WebServices.AllSearchWebService.registerClass('CBC.Radio3.Music.WebServices.AllSearchWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance = new CBC.Radio3.Music.WebServices.AllSearchWebService();
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_path = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_path(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_path = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_path(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_timeout = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_timeout = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_defaultUserContext = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_defaultUserContext = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_enableJsonp = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_enableJsonp = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.set_path("/search/services/AllSearchWebService.asmx");
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetAllSearchResults= function(searchTerm,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetAllSearchResults(searchTerm,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetArtistsList= function(searchTerm,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetArtistsList(searchTerm,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetVideosList= function(searchTerm,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetVideosList(searchTerm,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetProgramsSearchList= function(searchDto,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetProgramsSearchList(searchDto,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetArticlesSearchList= function(searchDto,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetArticlesSearchList(searchDto,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetVideosSearchList= function(searchDto,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetVideosSearchList(searchDto,onSuccess,onFailed,userContext); }
+CBC.Radio3.Music.WebServices.AllSearchWebService.GetVideoByPermalink= function(permalink,onSuccess,onFailed,userContext) {CBC.Radio3.Music.WebServices.AllSearchWebService._staticInstance.GetVideoByPermalink(permalink,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Search');
+if (typeof(CBC.Radio3.Search.AllSearchResultDTO) === 'undefined') {
+CBC.Radio3.Search.AllSearchResultDTO=gtc("CBC.Radio3.Search.AllSearchResultDTO");
+CBC.Radio3.Search.AllSearchResultDTO.registerClass('CBC.Radio3.Search.AllSearchResultDTO');
+}
+Type.registerNamespace('CBC.Radio3.Core.DataTransfer');
+if (typeof(CBC.Radio3.Core.DataTransfer.BrowserListDTO) === 'undefined') {
+CBC.Radio3.Core.DataTransfer.BrowserListDTO=gtc("CBC.Radio3.Core.DataTransfer.BrowserListDTO");
+CBC.Radio3.Core.DataTransfer.BrowserListDTO.registerClass('CBC.Radio3.Core.DataTransfer.BrowserListDTO');
+}
+Type.registerNamespace('CBC.Radio3.Search.Tasks');
+if (typeof(CBC.Radio3.Search.Tasks.ProgramSearchDTO) === 'undefined') {
+CBC.Radio3.Search.Tasks.ProgramSearchDTO=gtc("CBC.Radio3.Search.Tasks.ProgramSearchDTO");
+CBC.Radio3.Search.Tasks.ProgramSearchDTO.registerClass('CBC.Radio3.Search.Tasks.ProgramSearchDTO');
+}
+Type.registerNamespace('CBC.Radio3.Search.Domain');
+if (typeof(CBC.Radio3.Search.Domain.BlogSearchDTO) === 'undefined') {
+CBC.Radio3.Search.Domain.BlogSearchDTO=gtc("CBC.Radio3.Search.Domain.BlogSearchDTO");
+CBC.Radio3.Search.Domain.BlogSearchDTO.registerClass('CBC.Radio3.Search.Domain.BlogSearchDTO');
+}
+if (typeof(CBC.Radio3.Search.Domain.VideoSearchDTO) === 'undefined') {
+CBC.Radio3.Search.Domain.VideoSearchDTO=gtc("CBC.Radio3.Search.Domain.VideoSearchDTO");
+CBC.Radio3.Search.Domain.VideoSearchDTO.registerClass('CBC.Radio3.Search.Domain.VideoSearchDTO');
+}
+if (typeof(CBC.Radio3.Core.DataTransfer.BrowserItemDTO) === 'undefined') {
+CBC.Radio3.Core.DataTransfer.BrowserItemDTO=gtc("CBC.Radio3.Core.DataTransfer.BrowserItemDTO");
+CBC.Radio3.Core.DataTransfer.BrowserItemDTO.registerClass('CBC.Radio3.Core.DataTransfer.BrowserItemDTO');
+}

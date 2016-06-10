@@ -1,0 +1,128 @@
+Type.registerNamespace('CBC.Radio3.Player.Web');
+CBC.Radio3.Player.Web.PlayerWebService=function() {
+CBC.Radio3.Player.Web.PlayerWebService.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+CBC.Radio3.Player.Web.PlayerWebService.prototype={
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_path();},
+GetIPAddress:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetIPAddress',false,{},succeededCallback,failedCallback,userContext); },
+GetPreviousTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPreviousTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetTrack:function(playlistPermalink,sequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetTrack',false,{playlistPermalink:playlistPermalink,sequence:sequence},succeededCallback,failedCallback,userContext); },
+GetPlaylistTrack:function(playlistPermalink,sequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPlaylistTrack',false,{playlistPermalink:playlistPermalink,sequence:sequence},succeededCallback,failedCallback,userContext); },
+GetPreviousPollPlaylistTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPreviousPollPlaylistTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetPollPlaylistTrackByPermalink:function(pollTrackPermalink,pollPromoUrl,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPollPlaylistTrackByPermalink',false,{pollTrackPermalink:pollTrackPermalink,pollPromoUrl:pollPromoUrl},succeededCallback,failedCallback,userContext); },
+GetPollPlaylistTrack:function(playlistPermalink,sequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPollPlaylistTrack',false,{playlistPermalink:playlistPermalink,sequence:sequence},succeededCallback,failedCallback,userContext); },
+GetNextPollPlaylistTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetNextPollPlaylistTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetNextPlaylistTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetNextPlaylistTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetPreviousPlaylistTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPreviousPlaylistTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetPreviousTrackExtended:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPreviousTrackExtended',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetNextTrackExtended:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetNextTrackExtended',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetTrackExtended:function(playlistPermalink,sequence,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetTrackExtended',false,{playlistPermalink:playlistPermalink,sequence:sequence},succeededCallback,failedCallback,userContext); },
+GetNextTrack:function(playlistPermalink,currentSequence,shuffle,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetNextTrack',false,{playlistPermalink:playlistPermalink,currentSequence:currentSequence,shuffle:shuffle},succeededCallback,failedCallback,userContext); },
+GetPlaylist:function(playlistPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPlaylist',false,{playlistPermalink:playlistPermalink},succeededCallback,failedCallback,userContext); },
+AddTrackToPlaylist:function(trackPermalink,playlistPermalink,allowDuplicates,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'AddTrackToPlaylist',false,{trackPermalink:trackPermalink,playlistPermalink:playlistPermalink,allowDuplicates:allowDuplicates},succeededCallback,failedCallback,userContext); },
+RemoveTrackFromPlaylist:function(trackSequence,playlistPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'RemoveTrackFromPlaylist',false,{trackSequence:trackSequence,playlistPermalink:playlistPermalink},succeededCallback,failedCallback,userContext); },
+GetPlaylists:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPlaylists',false,{},succeededCallback,failedCallback,userContext); },
+GetAdminPlaylists:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetAdminPlaylists',false,{},succeededCallback,failedCallback,userContext); },
+GetFavouritePlaylists:function(succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetFavouritePlaylists',false,{},succeededCallback,failedCallback,userContext); },
+AddPlaylistToFavourites:function(playlistPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'AddPlaylistToFavourites',false,{playlistPermalink:playlistPermalink},succeededCallback,failedCallback,userContext); },
+GetFavouriteStatus:function(playlistPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetFavouriteStatus',false,{playlistPermalink:playlistPermalink},succeededCallback,failedCallback,userContext); },
+RemovePlaylistFromFavourites:function(playlistPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'RemovePlaylistFromFavourites',false,{playlistPermalink:playlistPermalink},succeededCallback,failedCallback,userContext); },
+Thumbs:function(up,trackPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'Thumbs',false,{up:up,trackPermalink:trackPermalink},succeededCallback,failedCallback,userContext); },
+GetThumbStatus:function(trackPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetThumbStatus',false,{trackPermalink:trackPermalink},succeededCallback,failedCallback,userContext); },
+LogTrackPlay:function(trackPermalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'LogTrackPlay',false,{trackPermalink:trackPermalink},succeededCallback,failedCallback,userContext); },
+CreateNewPlaylist:function(playlistName,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'CreateNewPlaylist',false,{playlistName:playlistName},succeededCallback,failedCallback,userContext); },
+GetPermalinkContext:function(permalink,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'GetPermalinkContext',false,{permalink:permalink},succeededCallback,failedCallback,userContext); }}
+CBC.Radio3.Player.Web.PlayerWebService.registerClass('CBC.Radio3.Player.Web.PlayerWebService',Sys.Net.WebServiceProxy);
+CBC.Radio3.Player.Web.PlayerWebService._staticInstance = new CBC.Radio3.Player.Web.PlayerWebService();
+CBC.Radio3.Player.Web.PlayerWebService.set_path = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_path(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_path = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_path(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_timeout = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_timeout(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_timeout = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_timeout(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_defaultUserContext = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_defaultUserContext(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_defaultUserContext = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_defaultUserContext(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_defaultSucceededCallback = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_defaultSucceededCallback(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_defaultSucceededCallback = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_defaultSucceededCallback(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_defaultFailedCallback = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_defaultFailedCallback(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_defaultFailedCallback = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_defaultFailedCallback(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_enableJsonp = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_enableJsonp(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_enableJsonp = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_enableJsonp(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_jsonpCallbackParameter = function(value) { CBC.Radio3.Player.Web.PlayerWebService._staticInstance.set_jsonpCallbackParameter(value); }
+CBC.Radio3.Player.Web.PlayerWebService.get_jsonpCallbackParameter = function() { return CBC.Radio3.Player.Web.PlayerWebService._staticInstance.get_jsonpCallbackParameter(); }
+CBC.Radio3.Player.Web.PlayerWebService.set_path("/modules/cbc-music-player/services/PlayerWebService.asmx");
+CBC.Radio3.Player.Web.PlayerWebService.GetIPAddress= function(onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetIPAddress(onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPreviousTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPreviousTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetTrack= function(playlistPermalink,sequence,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetTrack(playlistPermalink,sequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPlaylistTrack= function(playlistPermalink,sequence,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPlaylistTrack(playlistPermalink,sequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPreviousPollPlaylistTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPreviousPollPlaylistTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPollPlaylistTrackByPermalink= function(pollTrackPermalink,pollPromoUrl,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPollPlaylistTrackByPermalink(pollTrackPermalink,pollPromoUrl,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPollPlaylistTrack= function(playlistPermalink,sequence,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPollPlaylistTrack(playlistPermalink,sequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetNextPollPlaylistTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetNextPollPlaylistTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetNextPlaylistTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetNextPlaylistTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPreviousPlaylistTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPreviousPlaylistTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPreviousTrackExtended= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPreviousTrackExtended(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetNextTrackExtended= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetNextTrackExtended(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetTrackExtended= function(playlistPermalink,sequence,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetTrackExtended(playlistPermalink,sequence,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetNextTrack= function(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetNextTrack(playlistPermalink,currentSequence,shuffle,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPlaylist= function(playlistPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPlaylist(playlistPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.AddTrackToPlaylist= function(trackPermalink,playlistPermalink,allowDuplicates,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.AddTrackToPlaylist(trackPermalink,playlistPermalink,allowDuplicates,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.RemoveTrackFromPlaylist= function(trackSequence,playlistPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.RemoveTrackFromPlaylist(trackSequence,playlistPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPlaylists= function(onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPlaylists(onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetAdminPlaylists= function(onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetAdminPlaylists(onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetFavouritePlaylists= function(onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetFavouritePlaylists(onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.AddPlaylistToFavourites= function(playlistPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.AddPlaylistToFavourites(playlistPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetFavouriteStatus= function(playlistPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetFavouriteStatus(playlistPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.RemovePlaylistFromFavourites= function(playlistPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.RemovePlaylistFromFavourites(playlistPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.Thumbs= function(up,trackPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.Thumbs(up,trackPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetThumbStatus= function(trackPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetThumbStatus(trackPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.LogTrackPlay= function(trackPermalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.LogTrackPlay(trackPermalink,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.CreateNewPlaylist= function(playlistName,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.CreateNewPlaylist(playlistName,onSuccess,onFailed,userContext); }
+CBC.Radio3.Player.Web.PlayerWebService.GetPermalinkContext= function(permalink,onSuccess,onFailed,userContext) {CBC.Radio3.Player.Web.PlayerWebService._staticInstance.GetPermalinkContext(permalink,onSuccess,onFailed,userContext); }
+var gtc = Sys.Net.WebServiceProxy._generateTypedConstructor;
+Type.registerNamespace('CBC.Radio3.Player.DataTransfer');
+if (typeof(CBC.Radio3.Player.DataTransfer.PlayerTrackDTO) === 'undefined') {
+CBC.Radio3.Player.DataTransfer.PlayerTrackDTO=gtc("CBC.Radio3.Player.DataTransfer.PlayerTrackDTO");
+CBC.Radio3.Player.DataTransfer.PlayerTrackDTO.registerClass('CBC.Radio3.Player.DataTransfer.PlayerTrackDTO');
+}
+if (typeof(CBC.Radio3.Player.DataTransfer.PlayerPlaylistDTO) === 'undefined') {
+CBC.Radio3.Player.DataTransfer.PlayerPlaylistDTO=gtc("CBC.Radio3.Player.DataTransfer.PlayerPlaylistDTO");
+CBC.Radio3.Player.DataTransfer.PlayerPlaylistDTO.registerClass('CBC.Radio3.Player.DataTransfer.PlayerPlaylistDTO');
+}
+if (typeof(CBC.Radio3.Player.DataTransfer.PermalinkContextDTO) === 'undefined') {
+CBC.Radio3.Player.DataTransfer.PermalinkContextDTO=gtc("CBC.Radio3.Player.DataTransfer.PermalinkContextDTO");
+CBC.Radio3.Player.DataTransfer.PermalinkContextDTO.registerClass('CBC.Radio3.Player.DataTransfer.PermalinkContextDTO');
+}
